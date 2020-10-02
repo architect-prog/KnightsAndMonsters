@@ -2,21 +2,29 @@
 using Game.Inputs;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
+using UnityEngine.InputSystem;
 
 namespace Game.Components
 {
     public class CharacterMovingComponent : MovingComponent
     {
+        public event Action OnJump;
+
         [SerializeField] private float _jumpForce;
         [SerializeField] private LayerMask _contactLayers;
         [SerializeField] private Transform _surfaceCheck;
-        private ContactFilter2D _contactFilter;
+        [SerializeField] private float _checkRadius;
+        //private ContactFilter2D _contactFilter;
         private PlayerInputs _input;
+
+        public Vector2 MovingDirection { get; private set ; }
 
         private void Awake()
         {
             _input = new PlayerInputs();
-        }
+            _input.Player.Jump.started += Jump;
+        }     
 
         private void OnEnable()
         {
@@ -28,39 +36,63 @@ namespace Game.Components
         }
 
         private void Update()
-        {
-            Move();          
+        {       
+            Move(_input.Player.Move.ReadValue<Vector2>().x);   
         }
 
-        public override void Move()
+        public override void Move(float xDirection)
         {
-            float XAxis = _input.Player.Move.ReadValue<Vector2>().x;
-            Vector2 direction = new Vector2(XAxis * Speed, _rigidbody.velocity.y);        
+            Vector2 direction = new Vector2(xDirection * Speed, _rigidbody.velocity.y);        
             _rigidbody.velocity = direction;
+
+            if (_rigidbody.velocity.x > 0)            
+                Flip(0);            
+            else if (_rigidbody.velocity.x < 0)            
+                Flip(180);
+
+            MovingDirection = _rigidbody.velocity;
         }
 
-        public void Jump()
+        private void Jump(InputAction.CallbackContext context)
         {
             if (OnGround())
-            {
-                //_rigidbody.
+            { 
+                _rigidbody.AddForce(transform.up * _jumpForce, ForceMode2D.Impulse);
+                OnJump?.Invoke();
             }
         }
 
         public bool OnGround()
         {
-            List<Collider2D> colliders = new List<Collider2D>();
-            int count = _rigidbody.GetContacts(_contactFilter, colliders);
-            return count > 0;           
+            //List<Collider2D> colliders = new List<Collider2D>();
+            //int count = _rigidbody.GetContacts(_contactFilter, colliders);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(_surfaceCheck.position, _checkRadius, _contactLayers);
+            return colliders.Length >= 1;           
         }
 
         public override void Initialize()
         {
             base.Initialize();
-            _contactFilter = new ContactFilter2D();
-            _contactFilter.useTriggers = false;
-            _contactFilter.SetLayerMask(_contactLayers);
-            _contactFilter.useLayerMask = true;
+            //_contactFilter = new ContactFilter2D();
+            //_contactFilter.useTriggers = false;
+            //_contactFilter.SetLayerMask(_contactLayers);
+            //_contactFilter.useLayerMask = true;
+        }
+
+        private void Flip(float yAngle)
+        {
+            Quaternion newRotation = transform.rotation;
+            newRotation.y = yAngle;            
+            transform.rotation = newRotation;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            if (_surfaceCheck != null)
+            {
+                Gizmos.DrawWireSphere(_surfaceCheck.position, _checkRadius);
+            }
         }
     }
 }

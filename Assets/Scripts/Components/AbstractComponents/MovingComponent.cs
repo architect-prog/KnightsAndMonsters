@@ -20,7 +20,7 @@ namespace Game.Components.AbstractComponents
         {
             _rigidbody = GetComponent<Rigidbody2D>();
         }
-        public abstract void Move();
+        public abstract void Move(float xAxis);
     }
 
 }

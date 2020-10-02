@@ -9,13 +9,15 @@ using UnityEngine;
 namespace Game.Character
 {
     [RequireComponent(typeof(DamageComponent), typeof(ResistComponent), typeof(CharacterMovingComponent))]
-    [RequireComponent(typeof(ManaComponent))]
+    [RequireComponent(typeof(ManaComponent)), RequireComponent(typeof(Animator)), RequireComponent(typeof(CharacterMeleeAttackComponent))]
     public class Character : Unit, ICollector
     {
         [SerializeField] private ManaComponent _mana;
         [SerializeField] private DamageComponent _damage;
         [SerializeField] private ResistComponent _resist;
         [SerializeField] private CharacterMovingComponent _movingComponent;
+        [SerializeField] private Animator _animator;
+        [SerializeField] private CharacterMeleeAttackComponent _attackComponent;
 
         public override void Initialize()
         {
@@ -24,11 +26,44 @@ namespace Game.Character
             _damage = GetComponent<DamageComponent>();
             _resist = GetComponent<ResistComponent>();
             _movingComponent = GetComponent<CharacterMovingComponent>();
+            _animator = GetComponent<Animator>();
+            _attackComponent = GetComponent<CharacterMeleeAttackComponent>();
+
+            _movingComponent.OnJump += SetJumpTrigger;
+            _attackComponent.OnAttack += SetAttackAnimation;
         }
+
+        private void Update()
+        {
+            UpdateOnGround(_movingComponent.OnGround());
+            UpdateOnMove(_movingComponent.MovingDirection.x > 0.1f || _movingComponent.MovingDirection.x < -0.1f);
+            UpdateYSpeed(_movingComponent.MovingDirection.y);
+        }
+
+        public override void ApplyDamage(DamageComponent damage)
+        {
+            _health.ApplyDamage(damage, _resist);
+        }      
 
         public void Take(ICollactable collactable)
         {
-            
+
+        }
+    
+        private void SetJumpTrigger() => _animator.SetTrigger("onJump");
+        private void UpdateOnGround(bool onGround) => _animator.SetBool("onGround", onGround);
+        private void UpdateOnMove(bool isMove) => _animator.SetBool("isMove", isMove);
+        private void UpdateYSpeed(float ySpeed) => _animator.SetFloat("ySpeed", ySpeed);        
+
+        private void SetAttackAnimation(int condition)
+        {
+            _animator.SetTrigger($"attack{condition}");
+        }
+
+        private void OnDisable()
+        {
+            _movingComponent.OnJump -= SetJumpTrigger;
+            _attackComponent.OnAttack -= SetAttackAnimation;
         }
     }
 }
