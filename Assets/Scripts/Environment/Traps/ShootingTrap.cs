@@ -11,10 +11,10 @@ namespace Game.Environment.Traps
         [SerializeField] private Projectile _projectile;
         [SerializeField] private Transform _firepoint;
         [SerializeField] private float _shootRate;
-        private Timer _timer;
+        private RepeatingTimer _timer;
         void Start()
         {
-            _timer = new Timer(_shootRate, SpawnProjectile);
+            _timer = new RepeatingTimer(_shootRate, SpawnProjectile);
         }
 
         public void StartShooting()

@@ -2,52 +2,43 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Game.Utils;
 
 namespace Game.Components
 {
-    public class DamageComponent : GameComponent
+    [Serializable]
+    public sealed class DamageComponent : GameComponent
     {
-        [SerializeField] private List<Damage> _damage;
-        public IReadOnlyCollection<Damage> Damage { get => _damage; }
+        [SerializeField] private DamageSerializableDictionary _damage;
+        public IReadOnlyDictionary<DamageType, float> Damage 
+        { 
+            get
+            {
+                Dictionary<DamageType, float> result = new Dictionary<DamageType, float>();
+                foreach (DamageType key in _damage.Keys)
+                {
+                    result.Add(key, _damage[key]);
+                }
+                return result;
+            }
+        }
 
         public float PureDamage 
         { 
             get
             {
                 float result = 0f;
-                foreach (Damage damage in Damage)
+                foreach (float damage in Damage.Values)
                 {
-                    result += damage.Value;
+                    result += damage;
                 }
                 return result;
             }
         }
 
-        private void Start()
+        public override void Initialize()
         {
-            _damage = new List<Damage>();
-        }      
-    }
-
-
-    [Serializable]
-    public struct Damage
-    {
-        [SerializeField] private DamageType _type;
-        [SerializeField] private float _value;
-
-        public DamageType Type { get => _type; }
-        public float Value { get => _value; }
-
-        public Damage(DamageType type, float value)
-        {
-            _type = type;
-            _value = value;
-        }
-
-        public void ChangeValue(float value)
-        {
-            _value = value;
+            _damage = new DamageSerializableDictionary();
         }
     }
 

@@ -8,7 +8,7 @@ using Game.Inputs;
 
 namespace Assets.Scripts.Components
 {
-    public class CharacterMeleeAttackComponent : MeleeAttackComponent
+    public sealed class CharacterMeleeAttackComponent : MeleeAttackComponent
     {
         public event Action<int> OnAttack;
         [SerializeField] private Transform _attackPointCenter;

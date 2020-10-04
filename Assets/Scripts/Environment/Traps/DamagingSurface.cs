@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Game.Environment.Traps
 {
-
     public class DamagingSurface : MonoBehaviour
     {
         [SerializeField] private DamageComponent _damage;

@@ -1,4 +1,5 @@
 ﻿using Game.Components.AbstractComponents;
+using Game.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,47 +8,47 @@ namespace Game.Components
 {
     public class ResistComponent : GameComponent
     {
-        [SerializeField] private List<Resist> _resists;
-        public IReadOnlyCollection<Resist> Resists { get => _resists; }
-
-        private void Start()
+        [SerializeField] private ResistSerializableDictionary _resists;
+        public IReadOnlyDictionary<DamageType, Resist> Resists
         {
-            _resists = new List<Resist>();
+            get
+            {
+                Dictionary<DamageType, Resist> result = new Dictionary<DamageType, Resist>();
+                foreach (DamageType key in _resists.Keys)
+                {
+                    result.Add(key, _resists[key]);
+                }
+                return result;
+            }
         }
 
-        public float ReduceDamage(DamageComponent damage)
+        public override void Initialize()
         {
-            return 0f;
+            _resists = new ResistSerializableDictionary();
+        }
+
+        public virtual float ReduceDamage(DamageComponent damage)
+        {
+            float result = 0;
+            foreach (DamageType type in damage.Damage.Keys)
+            {
+                if (Resists.ContainsKey(type))                
+                    result += Resists[type] * damage.Damage[type];                
+                else                
+                    result += damage.Damage[type];                
+            }
+            return result;
         }
     }
 
     [Serializable]
     public struct Resist
     {
-        [SerializeField] private DamageType _type;
-        [SerializeField, Range(-1, 1)] private float _value;
+        [SerializeField, Range(-1, 1)] public float value;
 
-        public DamageType Type { get => _type; }
-        public float Value { get => _value; }
-
-        public Resist(DamageType type, float value) : this()
+        public static implicit operator float(Resist resist)
         {
-            _type = type;
-            ChangeValue(value);           
-        }
-                
-        public void ChangeValue(float value)
-        {
-            if (value > -1 && value < 1)
-            {
-                _value = value;
-            }
-            else
-            {
-                throw new ArgumentException("Value must be greater than -1 and lower than 1");
-            }
+            return resist.value;
         }
     }
-
-
 }

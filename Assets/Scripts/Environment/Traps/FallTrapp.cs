@@ -7,7 +7,7 @@ public class FallTrapp : MonoBehaviour
     private new Rigidbody2D rigidbody2D;
     private new ParticleSystem particleSystem;
     private bool wasTouched = false;
-    private int damage = 1;
+    private int damage = 0;
     private void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();

@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Game.Components.AbstractComponents;
 using System;
 
 namespace Assets.Scripts.Components
 {
-    public class ManaComponent : GameComponent
+    public sealed class ManaComponent : GameComponent
     {
         [SerializeField] private float _mana;
         public float Mana { get => _mana; private set => _mana = value; }
         public float MaxMana { get; private set; }
 
-        private void Start()
+        public override void Initialize()
         {
             MaxMana = Mana;
         }

@@ -1,19 +1,17 @@
 ﻿using Game.Components.AbstractComponents;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Components
 {
-    public class HealthComponent : GameComponent
+    public sealed class HealthComponent : GameComponent
     {
         public event EventHandler<EventArgs> OnDie;
         [SerializeField] private float _health;
         public float Health { get => _health; private set => _health = value; }
         public float MaxHealth { get; private set; }
-       
-        private void Start()
+      
+        public override void Initialize()
         {
             MaxHealth = Health;
         }

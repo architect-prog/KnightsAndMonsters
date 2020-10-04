@@ -1,13 +1,12 @@
 ﻿using Game.Components.AbstractComponents;
 using Game.Inputs;
 using UnityEngine;
-using System.Collections.Generic;
 using System;
 using UnityEngine.InputSystem;
 
 namespace Game.Components
 {
-    public class CharacterMovingComponent : MovingComponent
+    public sealed class CharacterMovingComponent : MovingComponent
     {
         public event Action OnJump;
 
@@ -16,7 +15,6 @@ namespace Game.Components
         [SerializeField] private Transform _surfaceCheck;
         [SerializeField] private float _checkRadius;
 
-        //private ContactFilter2D _contactFilter;
         private PlayerInputs _input;
 
         public Vector2 MovingDirection { get; private set ; }
@@ -64,8 +62,6 @@ namespace Game.Components
 
         public bool OnGround()
         {
-            //List<Collider2D> colliders = new List<Collider2D>();
-            //int count = _rigidbody.GetContacts(_contactFilter, colliders);
             Collider2D[] colliders = Physics2D.OverlapCircleAll(_surfaceCheck.position, _checkRadius, _contactLayers);
             return colliders.Length >= 1;           
         }
@@ -73,10 +69,6 @@ namespace Game.Components
         public override void Initialize()
         {
             base.Initialize();
-            //_contactFilter = new ContactFilter2D();
-            //_contactFilter.useTriggers = false;
-            //_contactFilter.SetLayerMask(_contactLayers);
-            //_contactFilter.useLayerMask = true;
         }
 
         private void Flip(float yAngle)

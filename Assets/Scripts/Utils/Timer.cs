@@ -1,62 +1,42 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+
 namespace Game.Utils
 {
     class Timer
     {
         public event Action OnTimerTriggered;
-        private Coroutine _coroutine;
-        private float _timerRate;
-        private float _countdown;
+        private float _delay;
 
         /// <summary>
-        /// Initializes timer rate
+        /// Initializes timer delay
         /// </summary>
-        /// <param name="timerRate"></param>
-        public Timer(float timerRate)
+        /// <param name="timeDelay"></param>
+        public Timer(float timeDelay)
         {
-            _timerRate = timerRate;
-            _countdown = timerRate;
-            _coroutine = null;
+            _delay = timeDelay;
         }
 
         /// <summary>
-        /// Initializes timer rate and action which timer perform
+        /// Initializes timer delay and action which timer perform
         /// </summary>
-        /// <param name="timerRate"></param>
+        /// <param name="timeDelay"></param>
         /// <param name="action"></param>
-        public Timer(float timerRate, Action action) : this(timerRate)
+        public Timer(float timeDelay, Action action) : this(timeDelay)
         {
             OnTimerTriggered += action;
         }
 
         /// <summary>
-        /// Start repeating timer action.
+        /// Start timer.
         /// initializer - the object to which it is attached timer. 
         /// </summary>
         /// <param name="initializer"></param>
         public void StartTimer(MonoBehaviour initializer)
         {
-            if (_coroutine == null)
-            {
-                _coroutine = initializer.StartCoroutine(Start());
-            }
-        }
-
-        /// <summary>
-        /// Stop repeating timer action.
-        /// initializer - the object to which it is attached timer.
-        /// </summary>
-        /// <param name="initializer"></param>
-        public void StopTimer(MonoBehaviour initializer)
-        {
-            if (_coroutine != null)
-            {
-                initializer.StopCoroutine(_coroutine);
-                _coroutine = null;
-            }           
-        }
+            initializer.StartCoroutine(Start());
+        }      
 
         /// <summary>
         /// Unsubscribe timer from all events.
@@ -66,79 +46,49 @@ namespace Game.Utils
             OnTimerTriggered = null;
         }
 
+
         private IEnumerator Start()
         {
-            while (true)
-            {
-                if (Mathf.Approximately(_countdown, 0))
-                {
-                    OnTimerTriggered?.Invoke();
-                    _countdown = _timerRate;
-                }
-                else
-                {
-                    _countdown -= Time.deltaTime;
-                }
-            }
+            yield return new WaitForSeconds(_delay);
+            OnTimerTriggered?.Invoke();
         }
     }
 
     class Timer<T>
     {
         public event Action<T> OnTimerTriggered;
-        private Coroutine _coroutine;
-        private float _timerRate;
-        private float _countdown;
+        private float _delay;
 
         /// <summary>
-        /// Initializes timer rate
+        /// Initializes timer delay
         /// </summary>
-        /// <param name="timerRate"></param>
-        public Timer(float timerRate)
+        /// <param name="timeDelay"></param>
+        public Timer(float timeDelay)
         {
-            _timerRate = timerRate;
-            _countdown = timerRate;
-            _coroutine = null;
+            _delay = timeDelay;
         }
 
         /// <summary>
-        /// Initializes timer rate and action which timer perform
+        /// Initializes timer delay and action which timer perform
         /// </summary>
-        /// <param name="timerRate"></param>
+        /// <param name="timeDelay"></param>
         /// <param name="action"></param>
-        public Timer(float timerRate, Action<T> action) : this(timerRate)
+        public Timer(float timeDelay, Action<T> action) : this(timeDelay)
         {
             OnTimerTriggered += action;
         }
 
         /// <summary>
-        /// Start repeating timer action.
-        /// initializer - the object to which it is attached timer.
+        /// Start timer.
+        /// initializer - the object to which it is attached timer. 
         /// value - value with which the timer will work.
         /// </summary>
         /// <param name="initializer"></param>
         /// <param name="value"></param>
         public void StartTimer(MonoBehaviour initializer, T value)
         {
-            if (_coroutine == null)
-            {
-                _coroutine = initializer.StartCoroutine(Start(value));
-            }
-        }
-
-        /// <summary>
-        /// Stop repeating timer action.
-        /// initializer - the object to which it is attached timer.
-        /// </summary>
-        /// <param name="initializer"></param>
-        public void StopTimer(MonoBehaviour initializer)
-        {
-            if (_coroutine != null)
-            {
-                initializer.StopCoroutine(_coroutine);
-                _coroutine = null;
-            }
-        }
+            initializer.StartCoroutine(Start(value));            
+        }      
 
         /// <summary>
         /// Unsubscribe timer from all events.
@@ -150,18 +100,8 @@ namespace Game.Utils
 
         private IEnumerator Start(T value)
         {
-            while (true)
-            {
-                if (Mathf.Approximately(_countdown, 0))
-                {
-                    OnTimerTriggered?.Invoke(value);
-                    _countdown = _timerRate;
-                }
-                else
-                {
-                    _countdown -= Time.deltaTime;
-                }
-            }
+            yield return new WaitForSeconds(_delay);
+            OnTimerTriggered?.Invoke(value);
         }
     }
 }
