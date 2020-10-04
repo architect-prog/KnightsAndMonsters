@@ -49,7 +49,7 @@ namespace Assets.Scripts.Components
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.blue;
+            Gizmos.color = Color.red;
             if (_attackPointCenter != null)
             {
                 Gizmos.DrawWireSphere(_attackPointCenter.position, _attackRadius);

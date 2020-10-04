@@ -15,6 +15,7 @@ namespace Game.Components
         [SerializeField] private LayerMask _contactLayers;
         [SerializeField] private Transform _surfaceCheck;
         [SerializeField] private float _checkRadius;
+
         //private ContactFilter2D _contactFilter;
         private PlayerInputs _input;
 
@@ -35,9 +36,10 @@ namespace Game.Components
             _input.Disable();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {       
-            Move(_input.Player.Move.ReadValue<Vector2>().x);   
+            Move(_input.Player.Move.ReadValue<Vector2>().x);
+            MovingDirection = _rigidbody.velocity;
         }
 
         public override void Move(float xDirection)
@@ -49,8 +51,6 @@ namespace Game.Components
                 Flip(0);            
             else if (_rigidbody.velocity.x < 0)            
                 Flip(180);
-
-            MovingDirection = _rigidbody.velocity;
         }
 
         private void Jump(InputAction.CallbackContext context)
@@ -88,7 +88,7 @@ namespace Game.Components
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.blue;
             if (_surfaceCheck != null)
             {
                 Gizmos.DrawWireSphere(_surfaceCheck.position, _checkRadius);
