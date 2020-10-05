@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Character
+namespace Game.Units.Character
 {
     [RequireComponent(typeof(DamageComponent), typeof(ResistComponent), typeof(CharacterMovingComponent))]
     [RequireComponent(typeof(ManaComponent)), RequireComponent(typeof(Animator)), RequireComponent(typeof(CharacterMeleeAttackComponent))]
