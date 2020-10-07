@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using UnityEngine;
 namespace Game.Utils
 {
@@ -70,15 +71,16 @@ namespace Game.Utils
         {
             while (true)
             {
-                if (Mathf.Approximately(_countdown, 0))
+                if (_countdown <= 0)
                 {
                     OnTimerTriggered?.Invoke();
                     _countdown = _timerRate;
                 }
                 else
                 {
-                    _countdown -= Time.deltaTime;
+                    _countdown -= Time.deltaTime;                   
                 }
+                yield return null;
             }
         }
     }
@@ -152,7 +154,7 @@ namespace Game.Utils
         {
             while (true)
             {
-                if (Mathf.Approximately(_countdown, 0))
+                if (_countdown <= 0)
                 {
                     OnTimerTriggered?.Invoke(value);
                     _countdown = _timerRate;
@@ -161,6 +163,7 @@ namespace Game.Utils
                 {
                     _countdown -= Time.deltaTime;
                 }
+                yield return null;
             }
         }
     }

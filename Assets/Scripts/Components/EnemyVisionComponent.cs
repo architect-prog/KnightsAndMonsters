@@ -1,4 +1,5 @@
 ﻿using Game.Components.AbstractComponents;
+using Game.Utils;
 using UnityEngine;
 
 namespace Game.Components
@@ -7,40 +8,43 @@ namespace Game.Components
     {
         [SerializeField] private bool _doubleSideVision;
         [SerializeField] private Transform _visionPoint;
-        [SerializeField] private Transform _wallCheckPoint;
-        [SerializeField] private Transform _abyssCheckPoint;
         [SerializeField] private LayerMask _checkingLayers;
-        [SerializeField] private LayerMask _hardSurfaces;
         [SerializeField] private float _visionRange;
-        [SerializeField] private float _wallcheckRadius;
-        [SerializeField] private float _abyssCheckRadius;
-
-        public Vector2 MovingDirection { get; private set; }
-        protected bool CheckAbyss()
-        {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(_abyssCheckPoint.position, _abyssCheckRadius, _hardSurfaces);
-            return colliders.Length == 0;
-        }
-
-        protected bool CheckWall()
-        {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(_wallCheckPoint.position, _wallcheckRadius, _hardSurfaces);
-            return colliders.Length > 0;
-        }
-
+        [SerializeField] private Sensor _wallSensor;
+        [SerializeField] private Sensor _abyssSensor;
+        private bool _changeDurection;
+        private RepeatingTimer _timer;
+        public Vector2 MovingDirection { get; private set; }       
         public override void Initialize()
         {
             base.Initialize();
+
+            _changeDurection = false;
+
             MovingDirection = -transform.right;
+
+            _timer = new RepeatingTimer(0.2f);
+            _timer.OnTimerTriggered += ChangeDirection;
+            _timer.StartTimer(this);
+        }
+
+        public void ChangeDirection()
+        {
+            _changeDurection = _wallSensor.Collide;
+            if (!_changeDurection)
+            {
+                _changeDurection = _abyssSensor.NotCollide;
+            }
+
+            if (_changeDurection)
+            {
+                MovingDirection = -MovingDirection;
+            }
         }
 
         private void Update()
         {
-            Scan();
-            if (CheckWall() || CheckAbyss())
-            {
-                MovingDirection = -MovingDirection;
-            }
+            //Scan();    
         }
 
         private void Scan()
@@ -70,16 +74,7 @@ namespace Game.Components
                 }
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(_visionPoint.position, new Vector3(_visionPoint.position.x + Vector3.left.x * _visionRange, _visionPoint.position.y));
-            }
-
-            if (_abyssCheckPoint != null) 
-            {
-                Gizmos.DrawWireSphere(_abyssCheckPoint.position, _abyssCheckRadius);
-            }
-            if (_wallCheckPoint != null)
-            {
-                Gizmos.DrawWireSphere(_wallCheckPoint.position, _wallcheckRadius);
-            }
+            }           
         }
     }
 }
