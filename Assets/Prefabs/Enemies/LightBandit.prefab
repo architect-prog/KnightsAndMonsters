@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4805181885227780}
   - component: {fileID: 95346456782871180}
   - component: {fileID: 50512961935941442}
-  - component: {fileID: 1345504525}
+  - component: {fileID: 4948429473514220736}
   - component: {fileID: 6431330866145360653}
   - component: {fileID: 8845077649425399202}
   - component: {fileID: 8359725131555278215}
@@ -35,7 +35,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2124505357428499165}
-  - {fileID: 1676657486779590119}
   - {fileID: 2908475165908777271}
   - {fileID: 4200725061895464534}
   - {fileID: 4938253921791296701}
@@ -82,8 +81,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &1345504525
-CapsuleCollider2D:
+--- !u!61 &4948429473514220736
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -95,9 +94,19 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.648862}
-  m_Size: {x: 0.5, y: 1.177618}
-  m_Direction: 0
+  m_Offset: {x: 0.003947258, y: 0.6664375}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.42370987, y: 1.1010039}
+  m_EdgeRadius: 0.06
 --- !u!114 &6431330866145360653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99d69883eb4e77a4e8c28e5c96a8e84c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 3
+  _speed: 0
 --- !u!114 &8845077649425399202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,14 +132,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f33a9773809b7849a6fbf3fe88ffac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _doubleSideVision: 1
-  _visionPoint: {fileID: 1676657486779590119}
+  _targetSensor: {fileID: 1054427256321978221}
+  _visionDirection: 30
+  _visionAngle: 60
+  _visionRange: 4
   _checkingLayers:
     serializedVersion: 2
     m_Bits: 512
-  _visionRange: 4
   _wallSensor: {fileID: 135909803644428907}
   _abyssSensor: {fileID: 8268390938439227878}
+  _checkingTime: 0.2
 --- !u!114 &8359725131555278215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,10 +167,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0753e6a862b2d8347b0643ea6d7aca92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: {fileID: 0}
-  _animator: {fileID: 0}
-  _movingComponent: {fileID: 0}
-  _visionComponent: {fileID: 0}
 --- !u!1 &304708931261500738
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,7 +177,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4938253921791296701}
   - component: {fileID: 4792371603144847325}
-  - component: {fileID: 3134208073211617849}
+  - component: {fileID: 1054427256321978221}
   m_Layer: 0
   m_Name: CharacterSensor
   m_TagString: Untagged
@@ -186,11 +193,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304708931261500738}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4805181885227780}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &4792371603144847325
 CircleCollider2D:
@@ -205,10 +212,10 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.8}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 4
---- !u!114 &3134208073211617849
+--- !u!114 &1054427256321978221
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,12 +224,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 304708931261500738}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3793b1bf9c1e472458f5069eb1fee83d, type: 3}
+  m_Script: {fileID: 11500000, guid: a25d8c59535c00d40b4fecfe84148c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _scanningMask:
     serializedVersion: 2
     m_Bits: 512
+  _activator: {fileID: 0}
 --- !u!1 &1784697838953732645
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,11 +257,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1784697838953732645}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.35, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4805181885227780}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &5118036600378728312
 CircleCollider2D:
@@ -394,11 +402,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4392829120598168666}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.09, z: 0}
+  m_LocalPosition: {x: 0.35, y: 0.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4805181885227780}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &4623887283116736785
 CircleCollider2D:
@@ -431,33 +439,3 @@ MonoBehaviour:
   _scanningMask:
     serializedVersion: 2
     m_Bits: 256
---- !u!1 &7783919980262421684
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1676657486779590119}
-  m_Layer: 0
-  m_Name: VisionPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1676657486779590119
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7783919980262421684}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4805181885227780}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

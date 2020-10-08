@@ -11,7 +11,7 @@ namespace Game.Utils
         {
             if (_scanningMask.Includes(collision.gameObject.layer))
             {
-                Collide = true;
+                Enter(collision);
             }
         }
 
@@ -19,8 +19,18 @@ namespace Game.Utils
         {
             if (_scanningMask.Includes(collision.gameObject.layer))
             {
-                Collide = false;
+                Exit(collision);
             }
         }           
+
+        protected virtual void Enter(Collider2D collision)
+        {
+            Collide = true;
+        }
+
+        protected virtual void Exit(Collider2D collision)
+        {
+            Collide = false;
+        }
     }
 }

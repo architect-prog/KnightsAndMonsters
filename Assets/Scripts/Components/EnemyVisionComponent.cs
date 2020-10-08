@@ -1,17 +1,28 @@
 ﻿using Game.Components.AbstractComponents;
 using Game.Utils;
+using UnityEditor;
 using UnityEngine;
 
 namespace Game.Components
 {
     class EnemyVisionComponent : GameComponent
-    {
-        [SerializeField] private bool _doubleSideVision;
-        [SerializeField] private Transform _visionPoint;
-        [SerializeField] private LayerMask _checkingLayers;
+    {        
+        [Header("Scanning settings")]
+        [SerializeField] private ObjectSensor _targetSensor;
+        [SerializeField, Range(0, 360)] private float _visionDirection;
+        [SerializeField, Range(0, 360)] private float _visionAngle;
         [SerializeField] private float _visionRange;
+        [SerializeField] private LayerMask _checkingLayers;
+
+        [Header("Moving sensors")]
         [SerializeField] private Sensor _wallSensor;
         [SerializeField] private Sensor _abyssSensor;
+
+        [Header("Scanning time")]
+        [SerializeField] private float _checkingTime;
+
+        [SerializeField] private GameObject _target;
+
         private bool _changeDurection;
         private RepeatingTimer _timer;
         public Vector2 MovingDirection { get; private set; }       
@@ -23,8 +34,9 @@ namespace Game.Components
 
             MovingDirection = -transform.right;
 
-            _timer = new RepeatingTimer(0.2f);
+            _timer = new RepeatingTimer(_checkingTime == 0 ? 0.1f : _checkingTime);
             _timer.OnTimerTriggered += ChangeDirection;
+            //_timer.OnTimerTriggered += Scan;
             _timer.StartTimer(this);
         }
 
@@ -44,37 +56,48 @@ namespace Game.Components
 
         private void Update()
         {
-            //Scan();    
+             Scan();    
         }
 
         private void Scan()
         {
-            //RaycastHit2D hit = Physics2D.Raycast(_visionPoint.position, -_visionPoint.right, _visionRange, _checkingLayers);
-
-            RaycastHit2D cast = Physics2D.BoxCast(_visionPoint.position, Vector2.one, 0, -_visionPoint.right, _visionRange, _checkingLayers);
-
-            if (cast.rigidbody != null)
+            if (_targetSensor.Collide)
             {
-                Debug.Log(cast.rigidbody.position);
+                Vector2 targetDirection = (_targetSensor.Activator.transform.position + Vector3.up) - _targetSensor.transform.position;
+
+                Vector3 endpoint = Quaternion.Euler(0, 0, _visionDirection) * -_targetSensor.transform.right;
+                if (Mathf.Acos(Vector2.Dot(targetDirection.normalized, endpoint.normalized)) * Mathf.Rad2Deg < _visionAngle / 2) 
+                {
+                    //Debug.Log(Mathf.Acos(Vector2.Dot(targetDirection.normalized, endpoint.normalized)) * Mathf.Rad2Deg);
+                    Debug.DrawLine(_targetSensor.transform.position, targetDirection + (Vector2)_targetSensor.transform.position);
+                } 
+
             }
-            Debug.DrawLine(_visionPoint.position + Vector3.up, new Vector3(cast.rigidbody?.position.x ?? 
-                _visionPoint.position.x + Vector3.left.x * _visionRange, _visionPoint.position.y + 1),
-                cast.rigidbody == null ? Color.white : Color.green);
         }
 
+        private void OnDisable()
+        {
+            _timer.OnTimerTriggered -= ChangeDirection;
+            _timer.StopTimer(this);
+        }
+
+
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            if (_visionPoint != null)
-            {
-                Gizmos.color = Color.blue;
-                if (_doubleSideVision)
-                {
-                    Gizmos.DrawLine(_visionPoint.position, new Vector3(_visionPoint.position.x + Vector3.right.x * _visionRange, _visionPoint.position.y));
-                    //Gizmos.DrawWireCube(_visionPoint.position, new Vector3(_visionRange, _visionRange));
-                }
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(_visionPoint.position, new Vector3(_visionPoint.position.x + Vector3.left.x * _visionRange, _visionPoint.position.y));
-            }           
+            if (_targetSensor != null)
+            {                
+                Handles.color = new Color(0, 1.0f, 0, 0.2f);
+                Vector3 endpoint = Quaternion.Euler(0, 0, _visionDirection + _visionAngle / 2) * -_targetSensor.transform.right;               
+                Handles.DrawSolidArc(_targetSensor.transform.position, Vector3.back, endpoint.normalized, _visionAngle, _visionRange);
+
+                endpoint = Quaternion.Euler(0, 0, _visionDirection) * -_targetSensor.transform.right;
+                Handles.DrawLine(_targetSensor.transform.position, endpoint + _targetSensor.transform.position);
+
+                Handles.color = new Color(1.0f, 0, 0, 0.1f);
+                Handles.DrawSolidDisc(_targetSensor.transform.position, Vector3.back, 1);
+            }
         }
+#endif
     }
 }

@@ -1,6 +1,4 @@
 ﻿using Game.Components;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Units.Enemies
@@ -8,9 +6,9 @@ namespace Game.Units.Enemies
     [RequireComponent(typeof(EnemyMovingComponent), typeof(Animator), typeof(EnemyVisionComponent))]
     public class MeleeEnemy : Unit
     {
-        [SerializeField] private Animator _animator;
-        [SerializeField] private EnemyMovingComponent _movingComponent;
-        [SerializeField] private EnemyVisionComponent _visionComponent;
+        private Animator _animator;
+        private EnemyMovingComponent _movingComponent;
+        private EnemyVisionComponent _visionComponent;
 
         private void Update()
         {

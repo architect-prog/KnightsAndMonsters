@@ -99,7 +99,5 @@ namespace Game.UI
                 _hearts[i].IsActive = true;
             }
         }
-
     }
-
 }

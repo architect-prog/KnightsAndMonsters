@@ -12,12 +12,12 @@ namespace Game.Units.Character
     [RequireComponent(typeof(ManaComponent)), RequireComponent(typeof(Animator)), RequireComponent(typeof(CharacterMeleeAttackComponent))]
     public class Character : Unit, ICollector
     {
-        [SerializeField] private ManaComponent _mana;
-        [SerializeField] private DamageComponent _damage;
-        [SerializeField] private ResistComponent _resist;
-        [SerializeField] private CharacterMovingComponent _movingComponent;
-        [SerializeField] private Animator _animator;
-        [SerializeField] private CharacterMeleeAttackComponent _attackComponent;
+        private ManaComponent _mana;
+        private DamageComponent _damage;
+        private ResistComponent _resist;
+        private CharacterMovingComponent _movingComponent;
+        private Animator _animator;
+        private CharacterMeleeAttackComponent _attackComponent;
 
         public override void Initialize()
         {
