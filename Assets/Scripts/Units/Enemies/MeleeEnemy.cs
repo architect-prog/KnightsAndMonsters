@@ -4,11 +4,26 @@ using UnityEngine;
 namespace Game.Units.Enemies
 {
     [RequireComponent(typeof(EnemyMovingComponent), typeof(Animator), typeof(EnemyVisionComponent))]
+    [RequireComponent(typeof(ResistComponent), typeof(DamageComponent), typeof(EnemyMeleeAttackComponent))]
     public class MeleeEnemy : Unit
     {
         private Animator _animator;
         private EnemyMovingComponent _movingComponent;
         private EnemyVisionComponent _visionComponent;
+        private ResistComponent _resist;
+        private DamageComponent _damage;
+        private EnemyMeleeAttackComponent _attackComponent;
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            _animator = GetComponent<Animator>();
+            _movingComponent = GetComponent<EnemyMovingComponent>();
+            _visionComponent = GetComponent<EnemyVisionComponent>();
+            _resist = GetComponent<ResistComponent>();
+            _damage = GetComponent<DamageComponent>();
+            _attackComponent = GetComponent<EnemyMeleeAttackComponent>();
+        }
 
         private void Update()
         {
@@ -19,20 +34,16 @@ namespace Game.Units.Enemies
 
         public override void ApplyDamage(DamageComponent damage)
         {
-            throw new System.NotImplementedException();
+            _health.ApplyDamage(damage, _resist);
         }
 
-        public override void Initialize()
+        public void Attack_AnimationEvent()
         {
-            base.Initialize();
-            _movingComponent = GetComponent<EnemyMovingComponent>();
-            _animator = GetComponent<Animator>();
-            _visionComponent = GetComponent<EnemyVisionComponent>();
+            _attackComponent.Attack(_damage);
         }
 
         private void UpdateIsAgred(bool isAgred) => _animator.SetBool("isAgred", isAgred);
         private void UpdateOnMove(bool onMove) => _animator.SetBool("onMove", onMove);
-
 
     }
 }

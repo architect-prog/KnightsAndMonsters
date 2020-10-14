@@ -1,4 +1,5 @@
 ﻿using Game.Components;
+using Game.Units;
 using UnityEngine;
 
 namespace Game.Environment.Traps

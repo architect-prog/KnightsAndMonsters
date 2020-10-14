@@ -8,6 +8,7 @@ namespace Game.Utils
     {
         public event Action OnTimerTriggered;
         private float _delay;
+        private Coroutine _coroutine;
 
         /// <summary>
         /// Initializes timer delay
@@ -35,8 +36,25 @@ namespace Game.Utils
         /// <param name="initializer"></param>
         public void StartTimer(MonoBehaviour initializer)
         {
-            initializer.StartCoroutine(Start());
-        }      
+            if (_coroutine == null)
+            {
+                _coroutine = initializer.StartCoroutine(Start());
+            }
+        }
+
+        /// <summary>
+        /// Stop timer.
+        /// initializer - the object to which it is attached timer. 
+        /// </summary>
+        /// <param name="initializer"></param>
+        public void StopTimer(MonoBehaviour initializer)
+        {
+            if (_coroutine != null)
+            {
+                initializer.StopCoroutine(_coroutine);
+                _coroutine = null;
+            }
+        }
 
         /// <summary>
         /// Unsubscribe timer from all events.

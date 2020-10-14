@@ -1364,7 +1364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4805181885227780, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.4
+      value: 16.01
       objectReference: {fileID: 0}
     - target: {fileID: 4805181885227780, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1406,26 +1406,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4792371603144847325, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
-      propertyPath: m_Radius
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6431330866145360653, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
-      propertyPath: _speed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8845077649425399202, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
-      propertyPath: _visionRange
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8845077649425399202, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
-      propertyPath: _visionDirection
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8845077649425399202, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
-      propertyPath: _visionAngle
-      value: 53
-      objectReference: {fileID: 0}
+    - target: {fileID: 4947511742707777868, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
 --- !u!1 &1144125026
@@ -116097,10 +116081,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 488268559787279611, guid: d56b76afbf8fd01409850c47017b3383, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
     - target: {fileID: 488268560277852026, guid: d56b76afbf8fd01409850c47017b3383, type: 3}
       propertyPath: m_Name
       value: Knight

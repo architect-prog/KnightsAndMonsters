@@ -1,9 +1,4 @@
 ﻿using Game.Components.AbstractComponents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Game.Components
@@ -22,9 +17,9 @@ namespace Game.Components
             _rigidbody.velocity = direction;
 
             if (_rigidbody.velocity.x > 0)
-                Flip(180);
-            else if (_rigidbody.velocity.x < 0)
                 Flip(0);
+            else if (_rigidbody.velocity.x < 0)
+                Flip(180);
         }
 
         private void Flip(float yAngle)
