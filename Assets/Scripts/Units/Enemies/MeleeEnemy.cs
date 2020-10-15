@@ -23,13 +23,26 @@ namespace Game.Units.Enemies
             _resist = GetComponent<ResistComponent>();
             _damage = GetComponent<DamageComponent>();
             _attackComponent = GetComponent<EnemyMeleeAttackComponent>();
+
+            _visionComponent.OnAttack += () => _animator.SetTrigger("attack");
         }
 
         private void Update()
         {
             UpdateOnMove(_movingComponent.MovingDirection.x > 0.1f || _movingComponent.MovingDirection.x < -0.1f);
-            //UpdateIsAgred(_movingComponent.MovingDirection.y);
-            _movingComponent.Move(_visionComponent.MovingDirection.x);
+            UpdateInCombat(_visionComponent.Target != null);
+
+            float xSpeed = 0;
+            if (_visionComponent.Target != null)
+            {
+                xSpeed = 0;
+            }
+            else
+            {
+                xSpeed = _visionComponent.MovingDirection.x;
+            }
+
+            _movingComponent.Move(xSpeed);
         }
 
         public override void ApplyDamage(DamageComponent damage)
@@ -42,9 +55,13 @@ namespace Game.Units.Enemies
             _attackComponent.Attack(_damage);
         }
 
-        private void UpdateIsAgred(bool isAgred) => _animator.SetBool("isAgred", isAgred);
+        private void UpdateInCombat(bool inCombat) => _animator.SetBool("inCombat", inCombat);
         private void UpdateOnMove(bool onMove) => _animator.SetBool("onMove", onMove);
+    }
 
+    public enum EnemyState
+    {
+        Idle, Move, inCombat
     }
 }
 

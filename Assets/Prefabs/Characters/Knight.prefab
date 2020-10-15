@@ -302,6 +302,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attackPointCenter: {fileID: 488268560945934668}
   _attackRadius: 0.55
+  _damagableLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  _discardAttackSeriesTime: 0.8
+  _attackSeriesCount: 3
 --- !u!114 &488268560277852028
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -31,6 +31,7 @@ namespace Game.Units.Character
 
             _movingComponent.OnJump += SetJumpTrigger;
             _attackComponent.OnAttack += SetAttackAnimation;
+            _attackComponent.OnAttack += _movingComponent.Push;
         }
 
         private void Update()
@@ -43,7 +44,13 @@ namespace Game.Units.Character
         public override void ApplyDamage(DamageComponent damage)
         {
             _health.ApplyDamage(damage, _resist);
+            _animator.SetTrigger("receiveDamage");            
         }      
+
+        public void Attack_AnimationEvent()
+        {
+            _attackComponent.Attack(_damage);
+        }
 
         public void Take(ICollactable collactable)
         {
@@ -53,12 +60,8 @@ namespace Game.Units.Character
         private void SetJumpTrigger() => _animator.SetTrigger("onJump");
         private void UpdateOnGround(bool onGround) => _animator.SetBool("onGround", onGround);
         private void UpdateOnMove(bool isMove) => _animator.SetBool("isMove", isMove);
-        private void UpdateYSpeed(float ySpeed) => _animator.SetFloat("ySpeed", ySpeed);        
-
-        private void SetAttackAnimation(int condition)
-        {
-            _animator.SetTrigger($"attack{condition}");
-        }
+        private void UpdateYSpeed(float ySpeed) => _animator.SetFloat("ySpeed", ySpeed);     
+        private void SetAttackAnimation() => _animator.SetTrigger($"attack{_attackComponent.CurrentAttack}");        
 
         private void OnDisable()
         {

@@ -22,6 +22,7 @@ namespace Game.Components
                 Flip(180);
         }
 
+      
         private void Flip(float yAngle)
         {
             Quaternion newRotation = transform.rotation;

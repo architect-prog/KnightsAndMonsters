@@ -3,11 +3,18 @@ using UnityEngine;
 
 namespace Game.Utils
 {
+    [RequireComponent(typeof(CircleCollider2D))]
     class RangeObjectSensor : ObjectSensor
     {
+        [Header("EditorOptions")]
+        [SerializeField, ColorUsage(false)] private Color _gizmosColor; 
+
+        [Header("Vision options")]
         [SerializeField, Range(0, 360)] private float _visionDirection;
         [SerializeField, Range(0, 360)] private float _visionAngle;
         [SerializeField] private float _visionRange;
+
+        private CircleCollider2D _circleCollider;
 
         protected override void Enter(Collider2D collision)
         {
@@ -37,16 +44,24 @@ namespace Game.Utils
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
-        {            
-            Handles.color = new Color(0, 1.0f, 0, 0.2f);
+        {
+            Color color = _gizmosColor;
+            color.a = 0.2f;
+
+            Handles.color = color;
             Vector3 endpoint = Quaternion.Euler(0, 0, _visionDirection + _visionAngle / 2) * transform.right;
             Handles.DrawSolidArc(transform.position, Vector3.back, endpoint.normalized, _visionAngle, _visionRange);
 
+            color.a = 0.8f;
+            Handles.color = color;
             endpoint = Quaternion.Euler(0, 0, _visionDirection) * transform.right;
-            Handles.DrawLine(transform.position, endpoint + transform.position);
+            Handles.DrawLine(transform.position, endpoint + transform.position);       
+        }
 
-            Handles.color = new Color(1.0f, 0, 0, 0.1f);
-            Handles.DrawSolidDisc(transform.position, Vector3.back, 1);            
+        private void OnValidate()
+        {
+            _circleCollider = GetComponent<CircleCollider2D>();
+            _circleCollider.radius = _visionRange;
         }
 #endif
     }

@@ -1406,10 +1406,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4947511742707777868, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
-      propertyPath: m_Icon
-      value: 
-      objectReference: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
 --- !u!1 &1144125026
@@ -116081,6 +116077,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 488268560277852023, guid: d56b76afbf8fd01409850c47017b3383, type: 3}
+      propertyPath: _discardAttackSeriesTime
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 488268560277852026, guid: d56b76afbf8fd01409850c47017b3383, type: 3}
       propertyPath: m_Name
       value: Knight

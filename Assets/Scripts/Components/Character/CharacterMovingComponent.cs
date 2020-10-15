@@ -31,6 +31,7 @@ namespace Game.Components
         }
         private void OnDisable()
         {
+            _input.Player.Jump.started -= Jump;
             _input.Disable();
         }
 
@@ -49,6 +50,12 @@ namespace Game.Components
                 Flip(0);            
             else if (_rigidbody.velocity.x < 0)            
                 Flip(180);
+        }
+
+        public void Push()
+        {
+
+            _rigidbody.AddForce(transform.right * 5, ForceMode2D.Impulse);
         }
 
         private void Jump(InputAction.CallbackContext context)

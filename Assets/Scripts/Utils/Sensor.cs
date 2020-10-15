@@ -2,6 +2,7 @@
 
 namespace Game.Utils
 {
+    [RequireComponent(typeof(Collider2D))]
     public class Sensor : MonoBehaviour
     {
         [SerializeField] private LayerMask _scanningMask;
